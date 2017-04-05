@@ -1,0 +1,64 @@
+﻿
+<script type="text/javascript" src="~/lib/protector/System.js"></script>
+<script type="text/javascript" src="~/lib/protector/System.IO.js"></script>
+<script type="text/javascript" src="~/lib/protector/System.Text.js"></script>
+<script type="text/javascript" src="~/lib/protector/System.Convert.js"></script>
+<script type="text/javascript" src="~/lib/protector/System.BigInt.js"></script>
+<script type="text/javascript" src="~/lib/protector/System.BitConverter.js"></script>
+<script type="text/javascript" src="~/lib/protector/System.Security.Cryptography.js"></script>
+<script type="text/javascript" src="~/lib/protector/System.Security.Cryptography.SHA1.js"></script>
+<script type="text/javascript" src="~/lib/protector/System.Security.Cryptography.HMACSHA1.js"></script>
+<script type="text/javascript" src="~/lib/protector/System.Security.Cryptography.RSA.js"></script>
+<script type="text/javascript" src="~/lib/protector/System.Security.Cryptography.MD5.js"></script>
+<script>
+    var Modulus = "";
+    var Exponent = "";
+    var P = "";
+    var Q = "";
+    var DP = "";
+    var DQ = "";
+    var InverseQ = "";
+    var D = "";
+    var Data = "hello,world!";
+
+    ajax({
+        url: myUrl,
+        type: 'get',
+        dataType: 'json',
+        timeout: 1000,
+        success: function (data, status) {
+            console.log(data)
+        },
+        fail: function (err, status) {
+            console.log(err)
+        }
+    })
+
+    // RSA 512 bit key.
+    var xmlParamsDefault =
+        "<RSAKeyValue>" +
+            "<Modulus>" + Modulus + "</Modulus>" +
+            "<Exponent>" + Exponent + "</Exponent>" +
+            "<P>" + P + "</P>" +
+            "<Q>" + Q + "</Q>" +
+            "<DP>" + DP + "</DP>" +
+            "<DQ>" + DQ + "</DQ>" +
+            "<InverseQ>" + InverseQ + "</InverseQ>" +
+            "<D>" + D + "</D>" +
+        "</RSAKeyValue>";
+
+    var decryptedBytes = System.Text.Encoding.UTF8.GetBytes(Data.trim());
+    // ------------------------------------------------
+    // Encrypt
+    // ------------------------------------------------
+    var rsa = GetNewRsaProvider();
+    // Import the RSA Key information.
+    rsa.ImportParameters(GetRsaKey(false));
+    // Encrypt the passed byte array and specify OAEP padding.
+    var encryptedBytes = rsa.Encrypt(decryptedBytes, false);
+    var encryptedString = System.Convert.ToBase64String(encryptedBytes)
+    // ------------------------------------------------
+    // Display the encrypted data.
+    //var encryptedString = System.BitConverter.ToString(encryptedBytes, "");
+    console.log(encryptedString);
+</script>

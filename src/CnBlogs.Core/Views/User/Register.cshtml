@@ -1,0 +1,166 @@
+﻿<link href="~/css/form.css" rel="stylesheet" />
+<style>
+fieldset label {
+    width: 86px;
+}
+</style>
+<nav>
+    <ul class="nav nav-pills">
+        <li><a href="/User/Login">登陆</a></li>
+        <li class="active"><a href="/User/Register">注册</a></li>
+        <li><a href="/User/BlogApply">申请博客</a></li>
+        <li><a href="/User/GetUserName">找回用户名</a></li>
+        <li><a href="/User/ResetPassword">重置密码</a></li>
+    </ul>
+</nav>
+<form id="form" action="#" method="POST">
+    <fieldset>
+        <legend class="topic-title">注册</legend>
+        <div class="block">
+            <div><label for="email">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱：</label><input type="text" id="email" name="email" /></div>
+            <div><span id="tip_email" class="tip-error"></span></div>
+        </div>
+        <div class="block">
+            <div><label for="userName">登陆用户名：</label><input type="text" id="userName" name="userName" /></div>
+            <div><span id="tip_userName" class="tip-error"></span></div>
+        </div>
+        <div class="block">
+            <div><label for="displayName">显&nbsp;示&nbsp;名&nbsp;称：</label><input type="text" id="displayName" name="displayName" /></div>
+            <div><span id="tip_displayName" class="tip-error"></span></div>
+        </div>
+        <div class="block">
+            <div><label for="pwd">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码：</label><input type="password" id="pwd" name="password" /></div>
+            <div><span id="tip_pwd" class="tip-error"></span></div>
+        </div>
+        <div class="block">
+            <div><label for="confirmPwd">确&nbsp;认&nbsp;密&nbsp;码：</label><input type="password" id="confirmPwd" name="confirmPassword" /></div>
+            <div><span id="tip_confirmPwd" class="tip-error"></span></div>
+        </div>
+        <div class="block img-block">
+            <div class="captcha-code-img"><img src="/user/getCaptchaCode" class="captchaCodeImg" id="captchaCodeImg" /></div>
+            <div><a href="#" id="captchaCodeBtn">换一张</a></div>
+        </div>
+        <div class="block">
+            <div><label for="captchaCode">验&nbsp;&nbsp;&nbsp;证&nbsp;&nbsp;&nbsp;码：</label><input type="text" id="captchaCode" name="captchaCode" /></div>
+            <div><span id="tip_captchaCode" class="tip-error"></span></div>
+        </div>
+        <div class="submit-block">
+            <div><input type="submit" value="注册" class="sub-btn btn btn-primary btn-sm" id="subBtn" /></div>
+            <div><span id="tip_status" class="tip-info"></span></div>
+        </div>
+        <div>
+            点击 “注册” 按钮，即表示您同意并愿意遵守<a href="#" target="_blank" rel="nofollow">用户协议</a>
+        </div>
+    </fieldset>
+</form>
+
+
+<script type="text/javascript" src="~/lib/protector/System.js"></script>
+<script type="text/javascript" src="~/lib/protector/System.IO.js"></script>
+<script type="text/javascript" src="~/lib/protector/System.Text.js"></script>
+<script type="text/javascript" src="~/lib/protector/System.Convert.js"></script>
+<script type="text/javascript" src="~/lib/protector/System.BigInt.js"></script>
+<script type="text/javascript" src="~/lib/protector/System.BitConverter.js"></script>
+<script type="text/javascript" src="~/lib/protector/System.Security.Cryptography.js"></script>
+<script type="text/javascript" src="~/lib/protector/System.Security.Cryptography.SHA1.js"></script>
+<script type="text/javascript" src="~/lib/protector/System.Security.Cryptography.HMACSHA1.js"></script>
+<script type="text/javascript" src="~/lib/protector/System.Security.Cryptography.RSA.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js" type="text/javascript"></script>
+<script>
+    $(function () {
+        $("#captchaCodeImg").click(function () {
+            $(this).attr("src", "/user/getCaptchaCode?" + new Date().toString());
+        });
+        $("#captchaCodeBtn").click(function (e) {
+            e.preventDefault();
+            $("#captchaCodeImg").attr("src", "/user/getCaptchaCode?" + new Date().toString());
+        });
+        function GetNewRsaProvider(dwKeySize) {
+            if (!dwKeySize) dwKeySize = 512;
+            return new System.Security.Cryptography.RSACryptoServiceProvider(dwKeySize);
+        }
+
+        function getEnData(str, pbk) {
+            var xmlParams =
+                "<RSAKeyValue>" +
+                    "<Modulus>" + pbk.modulus.trim() + "</Modulus>" +
+                    "<Exponent>" + pbk.exponent.trim() + "</Exponent>" +
+                    "<P></P>" +
+                    "<Q></Q>" +
+                    "<DP></DP>" +
+                    "<DQ></DQ>" +
+                    "<InverseQ></InverseQ>" +
+                    "<D></D>" +
+                "</RSAKeyValue>";
+            var decryptedBytes = System.Text.Encoding.UTF8.GetBytes(str);
+            var rsa = GetNewRsaProvider();
+            rsa.FromXmlString(xmlParams);
+            var encryptedBytes = rsa.Encrypt(decryptedBytes, false);
+            var str_rsa = System.Convert.ToBase64String(encryptedBytes);
+            return str_rsa;
+        }
+
+        function getData(pbk) {
+            var json = {
+                "Email": $("#email").val(),
+                "UserName": getEnData($("#userName").val(), pbk),
+                "DisplayName": $("#displayName").val(),
+                "Password": getEnData($("#pwd").val().trim(), pbk),
+                "ConfirmPassword": getEnData($("#confirmPwd").val().trim(), pbk),
+                "CaptchaCode": $("#captchaCode").val()
+            };
+            return json;
+        }
+
+        $("#subBtn").click(function (e) {
+            e.preventDefault();
+            // 发送获取公钥请求，以便于对敏感数据进行加密
+            $.ajax({
+                type: "POST",
+                url: "/User/GetPublicKey",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                beforeSend: function () {
+                    $("#tip_status").hide().text("");
+                    $("#tip_email").hide().text("");
+                    $("#tip_userName").hide().text("");
+                    $("#tip_pwd").hide().text("");
+                    $("#tip_displayName").hide().text("");
+                    $("#tip_confirmPwd").hide().text("");
+                    $("#tip_captchaCode").hide().text("");
+                    $("#tip_status").show().append("正在处理...");
+                },
+                success: function (pbk) {
+                    // 发送数据，尝试注册
+                    $.ajax({
+                        type: "POST",
+                        url: "/User/Register",
+                        data: getData(pbk),
+                        success: function (data) {
+                            if (data.isSuccess == true) {
+                                $("#subBtn").attr("disabled", true);
+                                window.location.href = "/User/RedirectToEmail?email=" + $("#email").val();
+                            }    
+                            if (data.isValidEmail == false) 
+                                $("#tip_email").show().append(data.emailErrorMessage);
+                            if (data.isValidDisplayName == false) 
+                                $("#tip_displayName").show().append(data.displayNameErrorMessage);
+                            if (data.isValidUserName == false) 
+                                $("#tip_userName").show().append(data.userNameErrorMessage);
+                            if (data.isValidPassword == false) 
+                                $("#tip_pwd").show().append(data.passwordErrorMessage);
+                            if (data.isValidConfirmPassword == false)
+                                $("#tip_confirmPwd").show().append(data.confirmPasswordErrorMessage);
+                            if (data.isValidCaptchaCode == false) 
+                                $("#tip_captchaCode").show().append(data.captchaCodeErrorMessage);
+                            $("#tip_status").hide().text("");
+                        },
+                        error: function (data) {
+
+                        }
+                    });
+                }
+            })
+        });
+    });
+</script>

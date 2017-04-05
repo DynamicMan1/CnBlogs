@@ -1,0 +1,52 @@
+﻿.tip-error {
+    display: none;
+    color: #a94442;
+    background: url("/img/error.png") no-repeat left;
+    background-size: 16px;
+}
+.tip-info {
+    color: #3c763d;
+}
+.captchaCodeImg {
+    cursor: pointer;
+}
+
+.tip-error, .tip-info {
+    padding-left: 20px;
+    margin-left: 12px;
+}
+
+.fieldset {
+    padding-top: 16px;
+}
+.topic-title {
+    border-bottom: 2px solid #BDCFDC;
+}
+.captcha-code-img {
+    padding-left: 71px;
+}
+.block {
+    display: table;
+    padding-bottom: 12px;
+}
+.block > div {
+    display: table-cell;
+}
+.img-block  a {
+    margin-left: 16px;
+}
+.submit-block {
+    border-top: 2px solid #2A71A5;
+    position: relative;
+    margin-bottom: 16px;
+}
+.submit-block .tip-info {
+    position: absolute;
+    top: 20px;
+    left: 130px;
+}
+.sub-btn {
+    width: 80px;
+    margin-top: 16px;
+    margin-left: 70px;
+}

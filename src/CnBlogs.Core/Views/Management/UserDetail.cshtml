@@ -1,0 +1,28 @@
+﻿@model CnBlogs.Core.Entities.User
+
+<div class="managementinfo-container">
+    <dl class="dl-horizontal">
+        <dt>Id</dt>
+        <dd>@Model.Id</dd>
+        <dt>邮箱</dt>
+        <dd>@Model.Email</dd>
+        <dt>登陆用户名</dt>
+        <dd>@Model.UserName</dd>
+        <dt>显示名称</dt>
+        <dd>@Model.DisplayName</dd>
+        <dt>密码</dt>
+        <dd>@Model.Password</dd>
+        <dt>创建时间</dt>
+        <dd>@Model.CreateTime</dd>
+        <dt>最后修改时间</dt>
+        <dd>@Model.LastModifiedTime</dd>
+        <dt>最后登陆时间</dt>
+        <dd>@Model.LastLoginTime</dd>
+        <dt>登陆次数</dt>
+        <dd>@Model.LoginTimes</dd>
+        <dt>是否激活</dt>
+        <dd>@Model.IsActivate</dd>
+        <dt>是否通过博客申请</dt>
+        <dd>@Model.IsBlogApply</dd>
+    </dl>
+</div>

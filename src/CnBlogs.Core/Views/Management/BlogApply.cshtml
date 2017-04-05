@@ -1,0 +1,120 @@
+﻿@model IEnumerable<CnBlogs.Core.Entities.BlogApply>
+
+<div>
+    <h2>博客申请处理</h2>
+    @if ((bool)ViewData["isRead"])
+    {
+        <ul class="nav nav-pills">
+            <li class="active"><a href="#">未处理</a></li>
+            <li><a href="/Management/BlogApply?isRead=false">全部</a></li>
+        </ul>
+    }
+    else
+    {
+        <ul class="nav nav-pills">
+            <li><a href="/Management/BlogApply">未处理</a></li>
+            <li class="active"><a href="#">全部</a></li>
+        </ul>
+    }
+</div>
+<div class="table-responsive">
+    <table class="table table-hover table-condensed">
+        <caption>博客申请信息表</caption>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>用户Id</th>
+                <th>真实姓名</th>
+                <th>申请理由</th>
+                <th>职位</th>
+                <th>单位</th>
+                <th>技术兴趣</th>
+                <th>是否进行过处理</th>
+                <th>创建时间</th>
+                <th>最后信息修改时间</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model == null)
+            {
+                <tr>
+                    <td colspan="11"><center>----------不存在没有处理过的申请！----------</center></td>
+                </tr>
+            }
+            else
+            {
+                foreach (var ba in Model)
+                {
+                    <tr>
+                        <td>@ba.Id</td>
+                        <td>@ba.UserId</td>
+                        <td>@ba.RealName</td>
+                        <td>@ba.Reason</td>
+                        <td>@ba.Position</td>
+                        <td>@ba.Unit</td>
+                        <td>@ba.Interest</td>
+                        <td>@ba.IsRead</td>
+                        <td>@ba.CreateTime</td>
+                        <td>@ba.LastModifiedTime</td>
+                        <td>
+                            <a href="/Management/UserDetail?id=@ba.UserId">查看用户信息</a>&nbsp;|&nbsp;
+                            <a class="submit-btn" href="/Management/SubmitBlogApply?id=@ba.Id">同意</a>&nbsp;|&nbsp;
+                            <a class="refuse-btn" href="/Management/RefuseBlogApply?id=@ba.Id">拒绝</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js" type="text/javascript"></script>
+<script>
+    $(function (submitBtn) {
+        $(".submit-btn").each(function () {
+            $(this).click(function (e) {
+                e.preventDefault();
+                $(this).attr("disabled", true);
+                // 发送数据
+                $.ajax({
+                    type: "POST",
+                    url: $(this).attr("href"),
+                    success: function (data) {
+                        if (data.isSuccess == true) {
+                            alert(data.message);
+                        } else {
+                            alert(data.message);
+                        }
+                    },
+                    error: function (data) {
+                        alert("发送请求时发生错误！");
+                    }
+                });
+                return false;
+            });
+        })
+        $(".refuse-btn").each(function () {
+            $(this).click(function (e) {
+                e.preventDefault();
+                $(this).attr("disabled", true);
+                // 发送数据
+                $.ajax({
+                    type: "POST",
+                    url: $(this).attr("href"),
+                    success: function (data) {
+                        if (data.isSuccess == true) {
+                            alert(data.message);
+                        } else {
+                            alert(data.message);
+                        }
+                    },
+                    error: function (data) {
+                        alert("发送请求时发生错误！");
+                    }
+                });
+                return false;
+            });
+        })
+    });
+</script>

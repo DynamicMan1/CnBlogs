@@ -1,0 +1,29 @@
+﻿{
+  "EmailUtil.Host": "smtp.163.com",
+  "EmailUtil.Sender": "jikeprompt@163.com",
+  "EmailUtil.Password": "jike140405",
+
+  "ConnectionString": "Server=localhost;database=cnBlogsDb;uid=root;pwd=coder",
+
+ "CookiePrivateKey": {
+    "D": "AqwashXvCIg1djsMF0gySLmwI0l8l/YeVx+JaTX0GdDYK7ZbzU8cksMnMDXWLxtUdmQZv4kU0bOEXFlNlimu0pbfGtDDIA9gydhQVgG4Ascawv6e/iy5kZJDuIfvvamBgFfFbVevOWtHAWOMvFXXn9sf0KN44yo3jS1DgRyGo8U=",
+    "DP": "HzcHF8F+CPs7C5Cd6VEWM11vTJaBQza6aynzkEtQg4sU53tXtT0MaLC+ambKG5BTqxV1GPpzS++7YsitrpZ0xQ==",
+    "DQ": "0yIUrbJynG8m38APkI6wlLeglPYx8AmvFM/4wVi6R3PeavBDiwdgqpaUQfEnJAs0kANmkkBGZ+TwO+n9bcGpSw==",
+    "Exponent": "AQAB",
+    "InverseQ": "iuUmXTEvEf+LQZv4PEUIQKuJnytjYKh/FGDY4gUlNegB/DbG0wf2j5V/e86QWkPRGCp1onDJ44pUWBPdlUZwRw==",
+    "Modulus": "sDp/HqapXRyJc4SU54v3xf7vMb/AyE1ueyNpF162NifZ3w2VOxjdbjzkN69ctAxT1RbCisQgJOL/w1ck+a9BvxZBSrMrCnEbXsX4hP6/A+p27UFRCun35Z9eBjyL0kGEId6J66W3nkw+DPbZXZ4efCE30RzXnafQI0tGQRIf0Ts=",
+    "P": "xedwug1ePn1c9tpq/CL08OippMJnnIq6CPln2PEi0Q895xeU1GgnkZMonm3r5jSIfgjFfXmhNSWzcCoDf56bRQ==",
+    "Q": "4/YhU3UCIAkObG2i1lpaT84WNkZEk/uxxFFjW6P9HbAV7Rdp3qbRqW2A3Ed7ufLARiVWCC+CUXi15bef1tVCfw=="
+  },
+  "CookiePublicKey": {
+      "D": null,
+      "DP": null,
+      "DQ": null,
+      "Exponent": "AQAB",
+      "InverseQ": null,
+      "Modulus": "sDp/HqapXRyJc4SU54v3xf7vMb/AyE1ueyNpF162NifZ3w2VOxjdbjzkN69ctAxT1RbCisQgJOL/w1ck+a9BvxZBSrMrCnEbXsX4hP6/A+p27UFRCun35Z9eBjyL0kGEId6J66W3nkw+DPbZXZ4efCE30RzXnafQI0tGQRIf0Ts=",
+      "P": null,
+      "Q": null
+  }
+}
+

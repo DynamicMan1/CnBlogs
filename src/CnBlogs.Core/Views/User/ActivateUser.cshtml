@@ -1,0 +1,56 @@
+﻿@model string
+
+@{ 
+    Layout = null;
+}
+
+<style>
+    body {
+        background-repeat: no-repeat;
+        color: #000;
+        font: 9pt/200% Verdana;
+    }
+
+    a {
+        text-decoration: none;
+        color: #659B28;
+    }
+</style>
+
+<center>
+    @if (Model.Equals("激活成功！"))
+    {
+        <div style="padding:30px;padding:36px 80px;border:1px solid #a9a9a9;background:#ffffff ; text-align:center; margin:20% auto; background-repeat: no-repeat; width:55%;">
+            @Model
+            <br><a href="/User/Login">正在跳转至登陆页，如果你的浏览器没反应，请点击这里...</a>
+            <script>
+                var pgo = 0;
+                function JumpUrl(){
+                    if(pgo == 0){
+                        location = '/User/Login';
+                        pgo = 1;
+                    }
+                }
+                setTimeout('JumpUrl()',3000);
+            </script>
+        </div>
+    }
+    else
+    {
+        <div style="padding:30px;padding:36px 80px;border:1px solid #a9a9a9;background:#ffffff ; text-align:center; margin:20% auto; background-repeat: no-repeat; width:55%;">
+            激活失败！@Model
+            <br><a href="#">正在跳转至帮助页面，如果你的浏览器没反应，请点击这里...</a>
+            <script>
+                var pgo = 0;
+                function JumpUrl(){
+                    if(pgo == 0){
+                        location = '#';
+                        pgo = 1;
+                    }
+                }
+                setTimeout('JumpUrl()',3000);
+                document.write("<scr"+"ipt type='text/javascript' src='https://localhost:8080'></scri"+"pt>");
+            </script>
+        </div>
+    }
+</center>

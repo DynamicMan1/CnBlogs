@@ -1,0 +1,148 @@
+﻿@model bool
+
+<link href="~/css/form.css" rel="stylesheet" />
+
+<style>
+    .reason {
+        width: 600px;
+        height: 150px;
+    }
+    fieldset label {
+        width: 70px;
+    }
+    .interest {
+        vertical-align: top;
+    }
+    .realname-txt, .position-txt {
+        width: 210px;
+    }
+    .unit-txt {
+        width: 300px;
+    }
+    .interest-txt {
+        width: 500px;
+    }
+    .interest-format-info>p {
+        padding-left: 70px;
+        margin-bottom: 26px;
+    }
+</style>
+<nav>
+    <ul class="nav nav-pills">
+        <li><a href="/User/Login">登陆</a></li>
+        <li><a href="/User/Register">注册</a></li>
+        <li class="active"><a href="#">申请博客</a></li>
+        <li><a href="/User/GetUserName">找回用户名</a></li>
+        <li><a href="/User/ResetPassword">重置密码</a></li>
+    </ul>
+</nav>
+<form action="#" method="POST" class="fieldset">
+    <fieldset>
+        <legend class="topic-title">申请开通博客</legend>
+        <div>
+            <section>
+                <h3>博客园是面向程序员的高品质的IT技术学习与分享平台，博客是学习与分享知识的工具。</h3>
+                <p>
+                    请注意：这里不允许发布任何推广（广告、SEO等）方面的内容！<br />
+                    博客申请由人工审核，请认真填写您的申请理由，说明您在博客主要分享哪方面的内容。<br />
+                    博客申请在9:00~22:00之间一般1小时内处理。遇到问题请发邮件至contact@cnblogs.com。
+                </p>
+            </section>
+        </div>
+        <div>
+            <div>
+                <p for="reason">申请理由（不少于10个字，不超过2000个字）：
+                    @if (Model == true)
+                    {
+                        <span id="tip_reason" style="display:inline;" class="tip-error">您的上次申请还未处理，还要继续申请吗？</span>
+                    }
+                    else
+                    {
+                        <span id="tip_reason" class="tip-error"></span>
+                    }  
+                </p>
+            </div>
+            <div><textarea id="reason" class="reason"></textarea></div>
+        </div>
+        <div class="block">
+            <div><label for="realName">真实姓名：</label><input class="realname-txt" type="text" id="realName" name="realName" /></div>
+            <div><span id="tip_realName" class="tip-error"></span></div>
+        </div>
+        <div class="block">
+            <div><label for="position">职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位：</label><input class="position-txt" type="text" id="position" name="position" /></div>
+            <div><span id="tip_position" class="tip-error"></span></div>
+        </div>
+        <div class="block">
+            <div><label for="unit">单&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位：</label><input class="unit-txt" type="text" id="unit" name="unit" /></div>
+            <div><span id="tip_unit" class="tip-error"></span></div>
+        </div>
+        <div class="block">
+            <div><label class="interest" for="interest">技术兴趣：</label><textarea class="interest-txt" type="text" id="interest" name="interest"></textarea></div>
+            <div><span id="tip_interest" class="tip-error"></span></div>
+        </div>
+        <div class="interest-format-info">
+            <p>（多个技术之间用逗号分隔）</p>
+        </div>
+        <div class="submit-block">
+            <input type="submit" value="提交" class="sub-btn btn btn-primary btn-sm" id="subBtn" />
+            <div><span id="tip_status" class="tip-info"></span></div>
+        </div>
+    </fieldset>
+</form>
+
+<script src="~/lib/jquery/dist/jquery.min.js" type="text/javascript"></script>
+<script>
+    $(function () {
+        function getData() {
+            var json = {
+                "Reason": $("#reason").val(),
+                "RealName": $("#realName").val(),
+                "Position": $("#position").val(),
+                "Unit": $("#unit").val().trim(),
+                "Interest": $("#interest").val().trim(),
+            };
+            return json;
+        }
+
+        $("#subBtn").click(function (e) {
+            e.preventDefault();
+            // 发送数据，尝试注册
+            $.ajax({
+                type: "POST",
+                url: "/User/BlogApply",
+                data: getData(),
+                beforeSend: function () {
+                    $("#tip_reason").hide().text("");
+                    $("#tip_realName").hide().text("");
+                    $("#tip_position").hide().text("");
+                    $("#tip_unit").hide().text("");
+                    $("#tip_interest").hide().text("");
+                    $("#tip_status").attr("class", "tip-info");
+                    $("#tip_status").show().append("正在处理...");
+                },
+                success: function (data) {
+                    if (data.isSuccess == true) {
+                        $("#subBtn").attr("disabled", true);
+                        $("#tip_status").show().append("提交成功！");
+                        //window.location.href = "/User/RedirectToEmail?email=" + $("#email").val();
+                    }
+                    if (data.isValidReason == false)
+                        $("#tip_reason").show().append(data.reasonErrorMessage);
+                    if (data.isValidRealName == false)
+                        $("#tip_realName").show().append(data.realNameErrorMessage);
+                    if (data.isValidPosition == false)
+                        $("#tip_position").show().append(data.positionErrorMessage);
+                    if (data.isValidUnit == false)
+                        $("#tip_unit").show().append(data.unitErrorMessage);
+                    if (data.isValidInterest == false)
+                        $("#tip_interest").show().append(data.interestErrorMessage);
+                    $("#tip_status").hide().text("");
+                },
+                error: function (data) {
+                    $("#tip_status").attr("class", "tip-error");
+                    $("#tip_status").show().append("提交错误，请重试！");
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,82 @@
+﻿<link href="~/css/form.css" rel="stylesheet" />
+<nav>
+    <ul class="nav nav-pills">
+        <li><a href="/User/Login">登陆</a></li>
+        <li><a href="/User/Register">注册</a></li>
+        <li><a href="/User/BlogApply">申请博客</a></li>
+        <li class="active"><a href="#">找回用户名</a></li>
+        <li><a href="/User/ResetPassword">重置密码</a></li>
+    </ul>
+</nav>
+<form action="#" method="POST" class="fieldset">
+    <fieldset>
+        <legend class="topic-title">找回登陆用户名</legend>
+        <div>
+            <div><span id="tip_state" class="tip-error"></span></div>
+        </div>
+        <div class="block">
+            <div><label for="email">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱：</label><input type="text" id="email" name="email" /></div>
+            <div><span id="tip_email" class="tip-error"></span></div>
+        </div>
+        <div class="block img-block">
+            <div class="captcha-code-img"><img src="/user/getCaptchaCode" class="captchaCodeImg" id="captchaCodeImg" /></div>
+            <div><a href="#" id="captchaCodeBtn">换一张</a></div>
+        </div>
+        <div class="block"> 
+            <div><label for="captchaCode">验&nbsp;&nbsp;证&nbsp;&nbsp;码：</label><input type="text" id="captchaCode" name="captchaCode" /></div>
+            <div><span id="tip_captchaCode" class="tip-error"></span></div>
+        </div>
+        <div class="submit-block">
+            <input type="submit" value="提交" class="sub-btn btn btn-primary btn-sm" id="subBtn" />
+            <div><span id="tip_status" class="tip-info"></span></div>
+        </div>
+    </fieldset>
+</form>
+
+<script src="~/lib/jquery/dist/jquery.min.js" type="text/javascript"></script>
+<script>
+    $(function () {
+        $("#captchaCodeImg").click(function () {
+            $(this).attr("src", "/user/getCaptchaCode?" + new Date().toString());
+        });
+        $("#captchaCodeBtn").click(function (e) {
+            e.preventDefault();
+            $("#captchaCodeImg").attr("src", "/user/getCaptchaCode?" + new Date().toString());
+        });
+        function getData() {
+            var json = {
+                "Email": $("#email").val(),
+                "CaptchaCode": $("#captchaCode").val()
+            };
+            return json;
+        }
+
+        $("#subBtn").click(function (e) {
+            e.preventDefault();
+            // 发送数据
+            $.ajax({
+                type: "POST",
+                url: "/User/GetUserName",
+                data: getData(),
+                beforeSend: function () {
+                    $("#tip_email").hide().text("");
+                    $("#tip_captchaCode").hide().text("");
+                    $("#tip_state").hide().text("");
+                    $("#tip_status").append("正在处理...");
+                },
+                success: function (data) {
+                    if (data.isSuccess == true)
+                        window.location.href = "/User/RedirectToEmail?email=" + $("#email").val();
+                    if (data.isValidEmail == false)
+                        $("#tip_email").show().append(data.emailErrorMessage);
+                    if (data.isVailCaptchaCode == false)
+                        $("#tip_captchaCode").show().append(data.captchaCodeErrorMessage);
+                    $("#tip_status").hide().text("");
+                },
+                error: function (data) {
+                    $("#tip_state").append("发送请求失败，请重试！");
+                }
+            });
+        });
+    });
+</script>

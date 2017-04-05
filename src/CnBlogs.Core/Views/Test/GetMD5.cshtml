@@ -1,0 +1,33 @@
+﻿@model string
+
+@Model
+
+<script type="text/javascript" src="~/lib/protector/System.js"></script>
+<script type="text/javascript" src="~/lib/protector/System.IO.js"></script>
+<script type="text/javascript" src="~/lib/protector/System.Text.js"></script>
+<script type="text/javascript" src="~/lib/protector/System.Convert.js"></script>
+<script type="text/javascript" src="~/lib/protector/System.BigInt.js"></script>
+<script type="text/javascript" src="~/lib/protector/System.BitConverter.js"></script>
+<script type="text/javascript" src="~/lib/protector/System.Security.Cryptography.js"></script>
+<script type="text/javascript" src="~/lib/protector/System.Security.Cryptography.SHA1.js"></script>
+<script type="text/javascript" src="~/lib/protector/System.Security.Cryptography.HMACSHA1.js"></script>
+<script type="text/javascript" src="~/lib/protector/System.Security.Cryptography.RSA.js"></script>
+<script type="text/javascript" src="~/lib/protector/System.Security.Cryptography.MD5.js"></script>
+<script>
+
+    window.onload = function () {
+        var s = "hello,world!";
+        var sb = System.Text.Encoding.UTF8.GetBytes(s);
+        Trace.IsEnabled = true;
+        Trace.Write("Start Demo");
+
+        console.log("// Create MD5 Algorithm");
+        var md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
+        console.log("md5.ComputeHashAsHex('" + s + "') = " + md5.ComputeHashAsHex(sb));
+        
+    }
+
+
+
+
+</script>

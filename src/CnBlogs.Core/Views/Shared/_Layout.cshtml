@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">博客园</a>
+                </div>
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li><a href="/User/Register"><span class="glyphicon glyphicon-user"></span> 注册</a></li>
+                    <li><a href="/User/Login"><span class="glyphicon glyphicon-log-in"></span> 登录</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <article>
+        @RenderBody()
+    </article>
+</body>
+</html>
